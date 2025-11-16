@@ -56,7 +56,7 @@ Supports:
 ```ts
 await capacitorAlarm.setAlarm({
   timestamp: Date.now() + 10_000,
-  title: "One-time <a href="#alarm">Alarm</a>",
+  title: "One-time Alarm",
   msg: "This alarm will ring once.",
   soundName: "content://media/internal/audio/media/21"
 });
@@ -66,7 +66,7 @@ await capacitorAlarm.setAlarm({
 ```ts
 await capacitorAlarm.setAlarm({
   repeatInterval: 1000 * 60 * 15,
-  title: "Repeating <a href="#alarm">Alarm</a>",
+  title: "Repeating Alarm",
   msg: "This alarm repeats every 15 minutes.",
   soundName: "content://media/internal/audio/media/33"
 });
@@ -75,12 +75,12 @@ await capacitorAlarm.setAlarm({
 ### Weekly alarm (every Monday at 7:30)
 ```ts
 await capacitorAlarm.setAlarm({
-  <a href="#calendar">calendar</a>: {
-    weekday: <a href="#weekday">Weekday.Monday</a>,
+  calendar: {
+    weekday: Weekday.Monday
     hour: 7,
     minute: 30,
   },
-  title: "Weekly <a href="#alarm">Alarm</a>",
+  title: "Weekly Alarm",
   msg: "It's Monday at 7:30!",
   soundName: "content://media/internal/audio/media/12"
 });
