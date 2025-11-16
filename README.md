@@ -35,17 +35,7 @@ npx cap sync
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-Capacitor Alarm Plugin
-
-Provides the ability to schedule exact alarms on Android.
-
-Features:
-- One-time alarms
-- Repeating alarms
-- Weekly calendar alarms
-- Alarm notifications
-- Ringtone picker
-- Event listeners for alarm triggers & notification taps
+Main Capacitor Alarm Plugin Interface.
 
 ### setAlarm(...)
 
@@ -55,10 +45,46 @@ setAlarm(alarm: Alarm) => Promise<Alarm>
 
 Schedule an alarm.
 
-Alarm may be based on:
-- A timestamp
-- A repeat interval
-- A weekly <a href="#calendar">calendar</a> schedule
+Supports:
+- Exact timestamp alarms
+- Repeating alarms
+- Weekly <a href="#calendar">calendar</a> alarms
+
+## Examples
+
+### One-time alarm
+```ts
+await capacitorAlarm.setAlarm({
+  timestamp: Date.now() + 10_000,
+  title: "One-time <a href="#alarm">Alarm</a>",
+  msg: "This alarm will ring once.",
+  soundName: "content://media/internal/audio/media/21"
+});
+```
+
+### Repeating alarm (every 15 minutes)
+```ts
+await capacitorAlarm.setAlarm({
+  repeatInterval: 1000 * 60 * 15,
+  title: "Repeating <a href="#alarm">Alarm</a>",
+  msg: "This alarm repeats every 15 minutes.",
+  soundName: "content://media/internal/audio/media/33"
+});
+```
+
+### Weekly alarm (every Monday at 7:30)
+```ts
+await capacitorAlarm.setAlarm({
+  <a href="#calendar">calendar</a>: {
+    weekday: <a href="#weekday">Weekday.Monday</a>,
+    hour: 7,
+    minute: 30,
+  },
+  title: "Weekly <a href="#alarm">Alarm</a>",
+  msg: "It's Monday at 7:30!",
+  soundName: "content://media/internal/audio/media/12"
+});
+```
 
 | Param       | Type                                    |
 | ----------- | --------------------------------------- |
@@ -75,7 +101,11 @@ Alarm may be based on:
 cancelAlarm(alarm: cancelAlarm) => Promise<void>
 ```
 
-Cancel a specific alarm.
+Cancel a specific alarm using its ID.
+
+```ts
+await capacitorAlarm.<a href="#cancelalarm">cancelAlarm</a>({ alarmId: 1 });
+```
 
 | Param       | Type                                                |
 | ----------- | --------------------------------------------------- |
@@ -90,7 +120,11 @@ Cancel a specific alarm.
 cancelAllAlarm() => Promise<void>
 ```
 
-Cancel all alarms created by the plugin.
+Cancel all scheduled alarms.
+
+```ts
+await capacitorAlarm.cancelAllAlarm();
+```
 
 --------------------
 
@@ -101,7 +135,11 @@ Cancel all alarms created by the plugin.
 requestExactAlarmPermission() => Promise<void>
 ```
 
-Request permission to schedule exact alarms (Android 12+).
+Request permission for exact alarms (Android 12+).
+
+```ts
+await capacitorAlarm.requestExactAlarmPermission();
+```
 
 --------------------
 
@@ -112,7 +150,11 @@ Request permission to schedule exact alarms (Android 12+).
 requestNotificationPermission() => Promise<void>
 ```
 
-Request notification permissions (Android 13+).
+Request notification permission (Android 13+).
+
+```ts
+await capacitorAlarm.requestNotificationPermission();
+```
 
 --------------------
 
@@ -123,7 +165,12 @@ Request notification permissions (Android 13+).
 checkNotificationPermission() => Promise<checkResult>
 ```
 
-Check if notification permissions were granted.
+Check notification permission status.
+
+```ts
+const res = await capacitorAlarm.checkNotificationPermission();
+console.log(res.hasPermission);
+```
 
 **Returns:** <code>Promise&lt;<a href="#checkresult">checkResult</a>&gt;</code>
 
@@ -136,7 +183,12 @@ Check if notification permissions were granted.
 checkExactAlarmPermission() => Promise<checkResult>
 ```
 
-Check if exact alarm permissions were granted.
+Check exact alarm permission status.
+
+```ts
+const res = await capacitorAlarm.checkExactAlarmPermission();
+console.log(res.hasPermission);
+```
 
 **Returns:** <code>Promise&lt;<a href="#checkresult">checkResult</a>&gt;</code>
 
@@ -151,6 +203,11 @@ getAlarms() => Promise<alarmResult>
 
 Retrieve all currently scheduled alarms.
 
+```ts
+const { alarms } = await capacitorAlarm.getAlarms();
+console.log(alarms);
+```
+
 **Returns:** <code>Promise&lt;<a href="#alarmresult">alarmResult</a>&gt;</code>
 
 --------------------
@@ -162,7 +219,12 @@ Retrieve all currently scheduled alarms.
 pickAlarmSound() => Promise<AlarmSoundResult>
 ```
 
-Opens the Android ringtone picker and returns a selected sound URI.
+Open the Android ringtone picker and return the selected sound URI.
+
+```ts
+const sound = await capacitorAlarm.pickAlarmSound();
+console.log("Selected sound:", sound.uri);
+```
 
 **Returns:** <code>Promise&lt;<a href="#alarmsoundresult">AlarmSoundResult</a>&gt;</code>
 
@@ -177,6 +239,10 @@ stopAlarm() => Promise<void>
 
 Stop the currently ringing alarm sound.
 
+```ts
+await capacitorAlarm.stopAlarm();
+```
+
 --------------------
 
 
@@ -186,7 +252,13 @@ Stop the currently ringing alarm sound.
 addListener(eventName: "alarmTriggered", listenerFunc: (data: Alarm) => void) => Promise<PluginListenerHandle>
 ```
 
-Fired when the alarm goes off.
+Triggered when an alarm fires.
+
+```ts
+capacitorAlarm.addListener("alarmTriggered", (alarm) =&gt; {
+  console.log("<a href="#alarm">Alarm</a> fired:", alarm);
+});
+```
 
 | Param              | Type                                                       |
 | ------------------ | ---------------------------------------------------------- |
@@ -204,7 +276,13 @@ Fired when the alarm goes off.
 addListener(eventName: "alarmNotificationTapped", listenerFunc: (data: Alarm) => void) => Promise<PluginListenerHandle>
 ```
 
-Fired when the user taps the alarm notification.
+Triggered when the user taps the alarm notification.
+
+```ts
+capacitorAlarm.addListener("alarmNotificationTapped", (alarm) =&gt; {
+  console.log("Notification tapped:", alarm);
+});
+```
 
 | Param              | Type                                                       |
 | ------------------ | ---------------------------------------------------------- |
@@ -222,7 +300,11 @@ Fired when the user taps the alarm notification.
 removeAllListeners() => Promise<void>
 ```
 
-Remove all listeners registered through this plugin.
+Remove all registered listeners.
+
+```ts
+await capacitorAlarm.removeAllListeners();
+```
 
 --------------------
 
@@ -232,7 +314,13 @@ Remove all listeners registered through this plugin.
 
 #### calendar
 
-Weekly <a href="#calendar">calendar</a> schedule.
+## Calendar Schedule Properties
+
+| Property | Type            | Description |
+|----------|----------------|-------------|
+| weekday  | <a href="#weekday">Weekday</a>        | Day of the week (Sunday–Saturday). |
+| hour     | number         | Hour (0–23). |
+| minute   | number         | Minute (0–59). |
 
 | Prop          | Type                                        |
 | ------------- | ------------------------------------------- |
@@ -243,7 +331,7 @@ Weekly <a href="#calendar">calendar</a> schedule.
 
 #### cancelAlarm
 
-Payload for canceling an alarm.
+Payload to cancel an alarm.
 
 | Prop          | Type                |
 | ------------- | ------------------- |
@@ -252,7 +340,7 @@ Payload for canceling an alarm.
 
 #### checkResult
 
-Permission check result.
+Permission status object.
 
 | Prop                | Type                 |
 | ------------------- | -------------------- |
@@ -261,7 +349,7 @@ Permission check result.
 
 #### alarmResult
 
-Returned list of alarms.
+Returned when retrieving alarms.
 
 | Prop         | Type                 |
 | ------------ | -------------------- |
@@ -270,7 +358,7 @@ Returned list of alarms.
 
 #### AlarmSoundResult
 
-Returned when selecting a ringtone.
+Returned when selecting an alarm sound.
 
 | Prop      | Type                |
 | --------- | ------------------- |
@@ -289,9 +377,23 @@ Returned when selecting a ringtone.
 
 #### Alarm
 
-Represents a scheduled alarm.
+## <a href="#alarm">Alarm</a> Properties
 
-<code>{ /** Unique ID of the alarm (auto-generated when created). */ id?: number; /** Unix timestamp in milliseconds when the alarm should fire. */ timestamp?: number; /** Calendar-based schedule (weekly / monthly / daily). */ <a href="#calendar">calendar</a>?: <a href="#calendar">calendar</a>; /** Repeating interval in milliseconds. */ repeatInterval?: number; /** Notification title. */ title: string; /** Notification message. */ msg: string; /** URI of the alarm sound. */ soundName: string; /** Android notification icon name. */ icon?: string; /** Text for the dismiss action button. */ dismissText?: string; /** Text shown for missed alarms. */ missedText?: string; /** Additional custom data passed back on events. */ data?: any; }</code>
+| Property        | Type       | Description |
+|----------------|------------|-------------|
+| id             | number?    | Unique ID of the alarm (auto-generated when created). |
+| timestamp      | number?    | Unix timestamp (ms) when the alarm should fire. |
+| <a href="#calendar">calendar</a>       | <a href="#calendar">calendar</a>?  | Calendar-based schedule (weekly / monthly / daily). |
+| repeatInterval | number?    | Repeating interval in milliseconds. |
+| title          | string     | Notification title. |
+| msg            | string     | Notification message. |
+| soundName      | string     | URI of the alarm sound. |
+| icon           | string?    | Android notification icon name. |
+| dismissText    | string?    | Text for the dismiss action button. |
+| missedText     | string?    | Text shown for missed alarms. |
+| data           | any?       | Additional custom data returned on events. |
+
+<code>{ id?: number; timestamp?: number; <a href="#calendar">calendar</a>?: <a href="#calendar">calendar</a>; repeatInterval?: number; title: string; msg: string; soundName: string; icon?: string; dismissText?: string; missedText?: string; data?: any; }</code>
 
 
 ### Enums

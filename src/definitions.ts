@@ -1,40 +1,33 @@
 import { PluginListenerHandle } from "@capacitor/core";
 
 /**
- * Represents a scheduled alarm.
+ * ## Alarm Properties
+ *
+ * | Property        | Type       | Description |
+ * |----------------|------------|-------------|
+ * | id             | number?    | Unique ID of the alarm (auto-generated when created). |
+ * | timestamp      | number?    | Unix timestamp (ms) when the alarm should fire. |
+ * | calendar       | calendar?  | Calendar-based schedule (weekly / monthly / daily). |
+ * | repeatInterval | number?    | Repeating interval in milliseconds. |
+ * | title          | string     | Notification title. |
+ * | msg            | string     | Notification message. |
+ * | soundName      | string     | URI of the alarm sound. |
+ * | icon           | string?    | Android notification icon name. |
+ * | dismissText    | string?    | Text for the dismiss action button. |
+ * | missedText     | string?    | Text shown for missed alarms. |
+ * | data           | any?       | Additional custom data returned on events. |
  */
 export type Alarm = {
-  /** Unique ID of the alarm (auto-generated when created). */
   id?: number;
-
-  /** Unix timestamp in milliseconds when the alarm should fire. */
   timestamp?: number;
-
-  /** Calendar-based schedule (weekly / monthly / daily). */
   calendar?: calendar;
-
-  /** Repeating interval in milliseconds. */
   repeatInterval?: number;
-
-  /** Notification title. */
   title: string;
-
-  /** Notification message. */
   msg: string;
-
-  /** URI of the alarm sound. */
   soundName: string;
-
-  /** Android notification icon name. */
   icon?: string;
-
-  /** Text for the dismiss action button. */
   dismissText?: string;
-
-  /** Text shown for missed alarms. */
   missedText?: string;
-
-  /** Additional custom data passed back on events. */
   data?: any;
 };
 
@@ -52,7 +45,13 @@ export enum Weekday {
 }
 
 /**
- * Weekly calendar schedule.
+ * ## Calendar Schedule Properties
+ *
+ * | Property | Type            | Description |
+ * |----------|----------------|-------------|
+ * | weekday  | Weekday        | Day of the week (Sunday–Saturday). |
+ * | hour     | number         | Hour (0–23). |
+ * | minute   | number         | Minute (0–59). |
  */
 export interface calendar {
   weekday: Weekday;
@@ -61,76 +60,68 @@ export interface calendar {
 }
 
 /**
- * Payload for canceling an alarm.
+ * Payload to cancel an alarm.
  */
 export interface cancelAlarm {
   alarmId: number;
 }
 
 /**
- * Returned list of alarms.
+ * Returned when retrieving alarms.
  */
 export interface alarmResult {
   alarms: Alarm[];
 }
 
 /**
- * Permission check result.
+ * Permission status object.
  */
 export interface checkResult {
   hasPermission: boolean;
 }
 
 /**
- * Returned when selecting a ringtone.
+ * Returned when selecting an alarm sound.
  */
 export interface AlarmSoundResult {
   uri: string;
 }
 
 /**
- * Capacitor Alarm Plugin
- *
- * Provides the ability to schedule exact alarms on Android.
- *
- * Features:
- * - One-time alarms
- * - Repeating alarms
- * - Weekly calendar alarms
- * - Alarm notifications
- * - Ringtone picker
- * - Event listeners for alarm triggers & notification taps
+ * Main Capacitor Alarm Plugin Interface.
  */
 export interface capacitorAlarmPlugin {
   /**
    * Schedule an alarm.
    *
-   * Alarm may be based on:
-   * - A timestamp
-   * - A repeat interval
-   * - A weekly calendar schedule
+   * Supports:
+   * - Exact timestamp alarms
+   * - Repeating alarms
+   * - Weekly calendar alarms
    *
-   * @example Schedule a simple one-time alarm:
+   * ## Examples
+   *
+   * ### One-time alarm
    * ```ts
    * await capacitorAlarm.setAlarm({
-   *   timestamp: Date.now() + 5000,
-   *   msg: "Wake up!",
-   *   title: "Alarm Triggered",
-   *   soundName: "content://media/internal/audio/media/50",
+   *   timestamp: Date.now() + 10_000,
+   *   title: "One-time Alarm",
+   *   msg: "This alarm will ring once.",
+   *   soundName: "content://media/internal/audio/media/21"
    * });
    * ```
    *
-   * @example Schedule a repeating alarm:
+   * ### Repeating alarm (every 15 minutes)
    * ```ts
    * await capacitorAlarm.setAlarm({
    *   repeatInterval: 1000 * 60 * 15,
-   *   title: "Every 15 minute alarm",
-   *   msg: "Repeating alarm",
+   *   title: "Repeating Alarm",
+   *   msg: "This alarm repeats every 15 minutes.",
    *   soundName: "content://media/internal/audio/media/33"
    * });
    * ```
    *
-   * @example Weekly alarm:
+   * ### Weekly alarm (every Monday at 7:30)
    * ```ts
    * await capacitorAlarm.setAlarm({
    *   calendar: {
@@ -139,27 +130,25 @@ export interface capacitorAlarmPlugin {
    *     minute: 30,
    *   },
    *   title: "Weekly Alarm",
-   *   msg: "It's Monday!",
-   *   soundName: "content://media/internal/audio/media/23",
+   *   msg: "It's Monday at 7:30!",
+   *   soundName: "content://media/internal/audio/media/12"
    * });
    * ```
    */
   setAlarm(alarm: Alarm): Promise<Alarm>;
 
   /**
-   * Cancel a specific alarm.
+   * Cancel a specific alarm using its ID.
    *
-   * @example
    * ```ts
-   * await capacitorAlarm.cancelAlarm({ alarmId: 123 });
+   * await capacitorAlarm.cancelAlarm({ alarmId: 1 });
    * ```
    */
   cancelAlarm(alarm: cancelAlarm): Promise<void>;
 
   /**
-   * Cancel all alarms created by the plugin.
+   * Cancel all scheduled alarms.
    *
-   * @example
    * ```ts
    * await capacitorAlarm.cancelAllAlarm();
    * ```
@@ -167,9 +156,8 @@ export interface capacitorAlarmPlugin {
   cancelAllAlarm(): Promise<void>;
 
   /**
-   * Request permission to schedule exact alarms (Android 12+).
+   * Request permission for exact alarms (Android 12+).
    *
-   * @example
    * ```ts
    * await capacitorAlarm.requestExactAlarmPermission();
    * ```
@@ -177,9 +165,8 @@ export interface capacitorAlarmPlugin {
   requestExactAlarmPermission(): Promise<void>;
 
   /**
-   * Request notification permissions (Android 13+).
+   * Request notification permission (Android 13+).
    *
-   * @example
    * ```ts
    * await capacitorAlarm.requestNotificationPermission();
    * ```
@@ -187,9 +174,8 @@ export interface capacitorAlarmPlugin {
   requestNotificationPermission(): Promise<void>;
 
   /**
-   * Check if notification permissions were granted.
+   * Check notification permission status.
    *
-   * @example
    * ```ts
    * const res = await capacitorAlarm.checkNotificationPermission();
    * console.log(res.hasPermission);
@@ -198,12 +184,11 @@ export interface capacitorAlarmPlugin {
   checkNotificationPermission(): Promise<checkResult>;
 
   /**
-   * Check if exact alarm permissions were granted.
+   * Check exact alarm permission status.
    *
-   * @example
    * ```ts
    * const res = await capacitorAlarm.checkExactAlarmPermission();
-   * console.log("Exact alarm allowed:", res.hasPermission);
+   * console.log(res.hasPermission);
    * ```
    */
   checkExactAlarmPermission(): Promise<checkResult>;
@@ -211,21 +196,19 @@ export interface capacitorAlarmPlugin {
   /**
    * Retrieve all currently scheduled alarms.
    *
-   * @example
    * ```ts
-   * const res = await capacitorAlarm.getAlarms();
-   * console.log(res.alarms);
+   * const { alarms } = await capacitorAlarm.getAlarms();
+   * console.log(alarms);
    * ```
    */
   getAlarms(): Promise<alarmResult>;
 
   /**
-   * Opens the Android ringtone picker and returns a selected sound URI.
+   * Open the Android ringtone picker and return the selected sound URI.
    *
-   * @example
    * ```ts
    * const sound = await capacitorAlarm.pickAlarmSound();
-   * console.log("Selected:", sound.uri);
+   * console.log("Selected sound:", sound.uri);
    * ```
    */
   pickAlarmSound(): Promise<AlarmSoundResult>;
@@ -233,7 +216,6 @@ export interface capacitorAlarmPlugin {
   /**
    * Stop the currently ringing alarm sound.
    *
-   * @example
    * ```ts
    * await capacitorAlarm.stopAlarm();
    * ```
@@ -241,12 +223,11 @@ export interface capacitorAlarmPlugin {
   stopAlarm(): Promise<void>;
 
   /**
-   * Fired when the alarm goes off.
+   * Triggered when an alarm fires.
    *
-   * @example
    * ```ts
    * capacitorAlarm.addListener("alarmTriggered", (alarm) => {
-   *   console.log("Alarm triggered:", alarm);
+   *   console.log("Alarm fired:", alarm);
    * });
    * ```
    */
@@ -256,9 +237,8 @@ export interface capacitorAlarmPlugin {
   ): Promise<PluginListenerHandle>;
 
   /**
-   * Fired when the user taps the alarm notification.
+   * Triggered when the user taps the alarm notification.
    *
-   * @example
    * ```ts
    * capacitorAlarm.addListener("alarmNotificationTapped", (alarm) => {
    *   console.log("Notification tapped:", alarm);
@@ -271,9 +251,8 @@ export interface capacitorAlarmPlugin {
   ): Promise<PluginListenerHandle>;
 
   /**
-   * Remove all listeners registered through this plugin.
+   * Remove all registered listeners.
    *
-   * @example
    * ```ts
    * await capacitorAlarm.removeAllListeners();
    * ```
