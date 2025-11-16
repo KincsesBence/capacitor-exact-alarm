@@ -1,7 +1,7 @@
 {
-  "name": "capacitor-alarm",
-  "version": "0.0.1",
-  "description": "Alarm clock scheduler",
+  "name": "capacitor-exact-alarm",
+  "version": "1.0.1",
+  "description": "Exact Alarm foreground service scheduler",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -19,19 +19,22 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KincsesBence.git"
+    "url": "https://github.com/KincsesBence/capacitor-exact-alarm"
   },
   "bugs": {
-    "url": "https://github.com/KincsesBence/issues"
+    "url": "https://github.com/KincsesBence/capacitor-exact-alarm/issues"
   },
   "keywords": [
     "capacitor",
+    "exact",
+    "alarm",
+    "foreground",
     "plugin",
     "native"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
-    "verify:ios": "xcodebuild -scheme CapacitorAlarm -destination generic/platform=iOS",
+    "verify:ios": "xcodebuild -scheme capacitorExactAlarmPlugin -destination generic/platform=iOS",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build",
     "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
@@ -39,7 +42,7 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\" --plugin=prettier-plugin-java",
     "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api capacitorAlarmPlugin --output-readme README.md --output-json dist/docs.json",
+    "docgen": "docgen --api capacitorExactAlarmPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
@@ -76,8 +79,5 @@
     "android": {
       "src": "android"
     }
-  },
-  "dependencies": {
-    "capacitor-alarm": "file:capacitor-alarm-0.0.1.tgz"
   }
 }

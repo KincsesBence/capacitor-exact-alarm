@@ -1,4 +1,4 @@
-package hu.bk.plugins.capacitorAlarm;
+package hu.bk.plugins.capacitorExactAlarm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,7 +12,7 @@ public class AlarmDismissReceiver extends BroadcastReceiver {
         Log.d("AlarmDismissReceiver", "Notification dismissed → stopping alarm");
 
         // Stop AlarmService
-        Intent stopIntent = new Intent(context, AlarmService.class);
+        Intent stopIntent = new Intent(context, hu.bk.plugins.capacitorExactAlarm.AlarmService.class);
         stopIntent.setAction("STOP_ALARM");
         context.startService(stopIntent);
 

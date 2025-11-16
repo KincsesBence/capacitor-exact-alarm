@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="hu.bk.plugins.capacitorAlarm">
+    package="hu.bk.plugins.capacitorExactAlarm">
 
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -13,15 +13,15 @@
 
 
     <application android:attributionTags="alarm">
-        <receiver android:name="hu.bk.plugins.capacitorAlarm.AlarmReceiver" />
-        <receiver android:name="hu.bk.plugins.capacitorAlarm.AlarmDismissReceiver" />
+        <receiver android:name="hu.bk.plugins.capacitorExactAlarm.AlarmReceiver" />
+        <receiver android:name="hu.bk.plugins.capacitorExactAlarm.AlarmDismissReceiver" />
         <activity
-            android:name="hu.bk.plugins.capacitorAlarm.NotificationOpenActivity"
+            android:name="hu.bk.plugins.capacitorExactAlarm.NotificationOpenActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <service
-            android:name="hu.bk.plugins.capacitorAlarm.AlarmService"
+            android:name="hu.bk.plugins.capacitorExactAlarm.AlarmService"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback" />
         </application>

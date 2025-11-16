@@ -1,4 +1,4 @@
-package hu.bk.plugins.capacitorAlarm;
+package hu.bk.plugins.capacitorExactAlarm;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,7 +25,7 @@ public class NotificationOpenActivity extends Activity {
         Log.d(TAG, "Notification tapped. Received alarmId: " + alarmId);
 
         // 1. Attempt to get the static plugin instance
-        capacitorAlarmPlugin plugin = capacitorAlarmPlugin.getInstance();
+        capacitorExactAlarmPlugin plugin = capacitorExactAlarmPlugin.getInstance();
 
         if (plugin != null && alarmId != -1) {
             // Case 1: App is running (foreground or background). Plugin instance exists.

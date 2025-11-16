@@ -24,7 +24,7 @@ export type Alarm = {
   repeatInterval?: number;
   title: string;
   msg: string;
-  soundName: string;
+  soundName?: string;
   icon?: string;
   dismissText?: string;
   missedText?: string;
@@ -90,7 +90,7 @@ export interface AlarmSoundResult {
 /**
  * Main Capacitor Alarm Plugin Interface.
  */
-export interface capacitorAlarmPlugin {
+export interface capacitorExactAlarmPlugin {
   /**
    * Schedule an alarm.
    *
@@ -103,7 +103,7 @@ export interface capacitorAlarmPlugin {
    *
    * ### One-time alarm
    * ```ts
-   * await capacitorAlarm.setAlarm({
+   * await capacitorExactAlarmPlugin.setAlarm({
    *   timestamp: Date.now() + 10_000,
    *   title: "One-time Alarm",
    *   msg: "This alarm will ring once.",
@@ -113,7 +113,7 @@ export interface capacitorAlarmPlugin {
    *
    * ### Repeating alarm (every 15 minutes)
    * ```ts
-   * await capacitorAlarm.setAlarm({
+   * await capacitorExactAlarmPlugin.setAlarm({
    *   repeatInterval: 1000 * 60 * 15,
    *   title: "Repeating Alarm",
    *   msg: "This alarm repeats every 15 minutes.",
@@ -123,7 +123,7 @@ export interface capacitorAlarmPlugin {
    *
    * ### Weekly alarm (every Monday at 7:30)
    * ```ts
-   * await capacitorAlarm.setAlarm({
+   * await capacitorExactAlarmPlugin.setAlarm({
    *   calendar: {
    *     weekday: Weekday.Monday,
    *     hour: 7,
@@ -141,7 +141,7 @@ export interface capacitorAlarmPlugin {
    * Cancel a specific alarm using its ID.
    *
    * ```ts
-   * await capacitorAlarm.cancelAlarm({ alarmId: 1 });
+   * await capacitorExactAlarmPlugin.cancelAlarm({ alarmId: 1 });
    * ```
    */
   cancelAlarm(alarm: cancelAlarm): Promise<void>;
@@ -150,7 +150,7 @@ export interface capacitorAlarmPlugin {
    * Cancel all scheduled alarms.
    *
    * ```ts
-   * await capacitorAlarm.cancelAllAlarm();
+   * await capacitorExactAlarmPlugin.cancelAllAlarm();
    * ```
    */
   cancelAllAlarm(): Promise<void>;
@@ -159,7 +159,7 @@ export interface capacitorAlarmPlugin {
    * Request permission for exact alarms (Android 12+).
    *
    * ```ts
-   * await capacitorAlarm.requestExactAlarmPermission();
+   * await capacitorExactAlarmPlugin.requestExactAlarmPermission();
    * ```
    */
   requestExactAlarmPermission(): Promise<void>;
@@ -168,7 +168,7 @@ export interface capacitorAlarmPlugin {
    * Request notification permission (Android 13+).
    *
    * ```ts
-   * await capacitorAlarm.requestNotificationPermission();
+   * await capacitorExactAlarmPlugin.requestNotificationPermission();
    * ```
    */
   requestNotificationPermission(): Promise<void>;
@@ -177,7 +177,7 @@ export interface capacitorAlarmPlugin {
    * Check notification permission status.
    *
    * ```ts
-   * const res = await capacitorAlarm.checkNotificationPermission();
+   * const res = await capacitorExactAlarmPlugin.checkNotificationPermission();
    * console.log(res.hasPermission);
    * ```
    */
@@ -187,7 +187,7 @@ export interface capacitorAlarmPlugin {
    * Check exact alarm permission status.
    *
    * ```ts
-   * const res = await capacitorAlarm.checkExactAlarmPermission();
+   * const res = await capacitorExactAlarmPlugin.checkExactAlarmPermission();
    * console.log(res.hasPermission);
    * ```
    */
@@ -197,7 +197,7 @@ export interface capacitorAlarmPlugin {
    * Retrieve all currently scheduled alarms.
    *
    * ```ts
-   * const { alarms } = await capacitorAlarm.getAlarms();
+   * const { alarms } = await capacitorExactAlarmPlugin.getAlarms();
    * console.log(alarms);
    * ```
    */
@@ -207,7 +207,7 @@ export interface capacitorAlarmPlugin {
    * Open the Android ringtone picker and return the selected sound URI.
    *
    * ```ts
-   * const sound = await capacitorAlarm.pickAlarmSound();
+   * const sound = await capacitorExactAlarmPlugin.pickAlarmSound();
    * console.log("Selected sound:", sound.uri);
    * ```
    */
@@ -217,7 +217,7 @@ export interface capacitorAlarmPlugin {
    * Stop the currently ringing alarm sound.
    *
    * ```ts
-   * await capacitorAlarm.stopAlarm();
+   * await capacitorExactAlarmPlugin.stopAlarm();
    * ```
    */
   stopAlarm(): Promise<void>;
@@ -226,7 +226,7 @@ export interface capacitorAlarmPlugin {
    * Triggered when an alarm fires.
    *
    * ```ts
-   * capacitorAlarm.addListener("alarmTriggered", (alarm) => {
+   * capacitorExactAlarmPlugin.addListener("alarmTriggered", (alarm) => {
    *   console.log("Alarm fired:", alarm);
    * });
    * ```
@@ -240,7 +240,7 @@ export interface capacitorAlarmPlugin {
    * Triggered when the user taps the alarm notification.
    *
    * ```ts
-   * capacitorAlarm.addListener("alarmNotificationTapped", (alarm) => {
+   * capacitorExactAlarmPlugin.addListener("alarmNotificationTapped", (alarm) => {
    *   console.log("Notification tapped:", alarm);
    * });
    * ```
@@ -254,7 +254,7 @@ export interface capacitorAlarmPlugin {
    * Remove all registered listeners.
    *
    * ```ts
-   * await capacitorAlarm.removeAllListeners();
+   * await capacitorExactAlarmPlugin.removeAllListeners();
    * ```
    */
   removeAllListeners(): Promise<void>;

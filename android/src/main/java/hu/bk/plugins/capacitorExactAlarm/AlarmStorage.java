@@ -1,4 +1,4 @@
-package hu.bk.plugins.capacitorAlarm;
+package hu.bk.plugins.capacitorExactAlarm;
 
 import android.content.Context;
 import android.content.SharedPreferences;

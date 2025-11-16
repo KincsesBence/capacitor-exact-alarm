@@ -1,4 +1,4 @@
-package hu.bk.plugins.capacitorAlarm;
+package hu.bk.plugins.capacitorExactAlarm;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -69,7 +69,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             if(calendarJson != null){
                 try{
                     JSObject calObj = new JSObject(calendarJson);
-                    nextTime = capacitorAlarmPlugin.computeNextCalendarTimestamp(calObj);
+                    nextTime = capacitorExactAlarmPlugin.computeNextCalendarTimestamp(calObj);
                 } catch (Exception e) {
                     Log.e("AlarmReceiver", "Failed to reschedule", e);
                 }

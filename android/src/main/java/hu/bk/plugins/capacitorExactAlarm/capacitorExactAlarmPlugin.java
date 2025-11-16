@@ -1,4 +1,4 @@
-package hu.bk.plugins.capacitorAlarm;
+package hu.bk.plugins.capacitorExactAlarm;
 
 import android.Manifest;
 import android.app.Activity;
@@ -32,9 +32,9 @@ import org.json.JSONObject;
 import java.util.Calendar;
 
 @CapacitorPlugin(name = "capacitorAlarm")
-public class capacitorAlarmPlugin extends Plugin {
+public class capacitorExactAlarmPlugin extends Plugin {
 
-    private static capacitorAlarmPlugin instance;
+    private static capacitorExactAlarmPlugin instance;
     private BroadcastReceiver alarmReceiver;
 
     private AlarmStorage alarmStorage;
@@ -107,7 +107,7 @@ public class capacitorAlarmPlugin extends Plugin {
         });
     }
 
-    public static capacitorAlarmPlugin getInstance() {
+    public static capacitorExactAlarmPlugin getInstance() {
         return instance;
     }
 
@@ -165,7 +165,7 @@ public class capacitorAlarmPlugin extends Plugin {
     @PluginMethod
     public void setAlarm(PluginCall call) {
 
-        long timestamp = call.getDouble("timestamp", 0.0).longValue();
+        long timestamp = call.getLong("timestamp", 0L);
         long repeatInterval = call.getDouble("repeatInterval", 0.0).longValue();
         Log.d("setAlarm",  "call params: " + call.getData().toString());
         String title = call.getString("title", "Alarm");
@@ -176,6 +176,8 @@ public class capacitorAlarmPlugin extends Plugin {
         String dismissText = call.getString("dismissText","Dismiss");
         String missedText = call.getString("missedText","Missed Alarm:");
         JSObject calendarObj = call.getObject("calendar");
+
+        Log.d("setAlarm", "calendar!" + timestamp);
 
 
         long currentTimestamp = System.currentTimeMillis();

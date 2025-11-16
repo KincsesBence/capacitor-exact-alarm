@@ -1,10 +1,10 @@
 import { registerPlugin } from '@capacitor/core';
 
-import type { capacitorAlarmPlugin } from './definitions';
+import type { capacitorExactAlarmPlugin } from './definitions';
 
-const capacitorAlarm = registerPlugin<capacitorAlarmPlugin>('capacitorAlarm', {
-  web: () => import('./web').then((m) => new m.capacitorAlarmWeb()),
+const capacitorExactAlarm = registerPlugin<capacitorExactAlarmPlugin>('capacitorAlarm', {
+  web: () => import('./web').then((m) => new m.capacitorExactAlarmWeb()),
 });
 
 export * from './definitions';
-export { capacitorAlarm };
+export { capacitorExactAlarm };

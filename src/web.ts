@@ -1,8 +1,8 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type {capacitorAlarmPlugin } from './definitions';
+import type { capacitorExactAlarmPlugin } from './definitions';
 
-export class capacitorAlarmWeb extends WebPlugin implements capacitorAlarmPlugin {
+export class capacitorExactAlarmWeb extends WebPlugin implements capacitorExactAlarmPlugin {
   async setAlarm(): Promise<any> {
 
     console.warn('Alarm is only available on Android.');

@@ -54,9 +54,9 @@ Supports:
 
 ### One-time alarm
 ```ts
-await capacitorAlarm.setAlarm({
+await capacitorExactAlarmPlugin.setAlarm({
   timestamp: Date.now() + 10_000,
-  title: "One-time Alarm",
+  title: "One-time <a href="#alarm">Alarm</a>",
   msg: "This alarm will ring once.",
   soundName: "content://media/internal/audio/media/21"
 });
@@ -64,9 +64,9 @@ await capacitorAlarm.setAlarm({
 
 ### Repeating alarm (every 15 minutes)
 ```ts
-await capacitorAlarm.setAlarm({
+await capacitorExactAlarmPlugin.setAlarm({
   repeatInterval: 1000 * 60 * 15,
-  title: "Repeating Alarm",
+  title: "Repeating <a href="#alarm">Alarm</a>",
   msg: "This alarm repeats every 15 minutes.",
   soundName: "content://media/internal/audio/media/33"
 });
@@ -74,13 +74,13 @@ await capacitorAlarm.setAlarm({
 
 ### Weekly alarm (every Monday at 7:30)
 ```ts
-await capacitorAlarm.setAlarm({
-  calendar: {
-    weekday: Weekday.Monday
+await capacitorExactAlarmPlugin.setAlarm({
+  <a href="#calendar">calendar</a>: {
+    weekday: <a href="#weekday">Weekday.Monday</a>,
     hour: 7,
     minute: 30,
   },
-  title: "Weekly Alarm",
+  title: "Weekly <a href="#alarm">Alarm</a>",
   msg: "It's Monday at 7:30!",
   soundName: "content://media/internal/audio/media/12"
 });
@@ -104,7 +104,7 @@ cancelAlarm(alarm: cancelAlarm) => Promise<void>
 Cancel a specific alarm using its ID.
 
 ```ts
-await capacitorAlarm.<a href="#cancelalarm">cancelAlarm</a>({ alarmId: 1 });
+await capacitorExactAlarmPlugin.<a href="#cancelalarm">cancelAlarm</a>({ alarmId: 1 });
 ```
 
 | Param       | Type                                                |
@@ -123,7 +123,7 @@ cancelAllAlarm() => Promise<void>
 Cancel all scheduled alarms.
 
 ```ts
-await capacitorAlarm.cancelAllAlarm();
+await capacitorExactAlarmPlugin.cancelAllAlarm();
 ```
 
 --------------------
@@ -138,7 +138,7 @@ requestExactAlarmPermission() => Promise<void>
 Request permission for exact alarms (Android 12+).
 
 ```ts
-await capacitorAlarm.requestExactAlarmPermission();
+await capacitorExactAlarmPlugin.requestExactAlarmPermission();
 ```
 
 --------------------
@@ -153,7 +153,7 @@ requestNotificationPermission() => Promise<void>
 Request notification permission (Android 13+).
 
 ```ts
-await capacitorAlarm.requestNotificationPermission();
+await capacitorExactAlarmPlugin.requestNotificationPermission();
 ```
 
 --------------------
@@ -168,7 +168,7 @@ checkNotificationPermission() => Promise<checkResult>
 Check notification permission status.
 
 ```ts
-const res = await capacitorAlarm.checkNotificationPermission();
+const res = await capacitorExactAlarmPlugin.checkNotificationPermission();
 console.log(res.hasPermission);
 ```
 
@@ -186,7 +186,7 @@ checkExactAlarmPermission() => Promise<checkResult>
 Check exact alarm permission status.
 
 ```ts
-const res = await capacitorAlarm.checkExactAlarmPermission();
+const res = await capacitorExactAlarmPlugin.checkExactAlarmPermission();
 console.log(res.hasPermission);
 ```
 
@@ -204,7 +204,7 @@ getAlarms() => Promise<alarmResult>
 Retrieve all currently scheduled alarms.
 
 ```ts
-const { alarms } = await capacitorAlarm.getAlarms();
+const { alarms } = await capacitorExactAlarmPlugin.getAlarms();
 console.log(alarms);
 ```
 
@@ -222,7 +222,7 @@ pickAlarmSound() => Promise<AlarmSoundResult>
 Open the Android ringtone picker and return the selected sound URI.
 
 ```ts
-const sound = await capacitorAlarm.pickAlarmSound();
+const sound = await capacitorExactAlarmPlugin.pickAlarmSound();
 console.log("Selected sound:", sound.uri);
 ```
 
@@ -240,7 +240,7 @@ stopAlarm() => Promise<void>
 Stop the currently ringing alarm sound.
 
 ```ts
-await capacitorAlarm.stopAlarm();
+await capacitorExactAlarmPlugin.stopAlarm();
 ```
 
 --------------------
@@ -255,7 +255,7 @@ addListener(eventName: "alarmTriggered", listenerFunc: (data: Alarm) => void) =>
 Triggered when an alarm fires.
 
 ```ts
-capacitorAlarm.addListener("alarmTriggered", (alarm) =&gt; {
+capacitorExactAlarmPlugin.addListener("alarmTriggered", (alarm) =&gt; {
   console.log("<a href="#alarm">Alarm</a> fired:", alarm);
 });
 ```
@@ -279,7 +279,7 @@ addListener(eventName: "alarmNotificationTapped", listenerFunc: (data: Alarm) =>
 Triggered when the user taps the alarm notification.
 
 ```ts
-capacitorAlarm.addListener("alarmNotificationTapped", (alarm) =&gt; {
+capacitorExactAlarmPlugin.addListener("alarmNotificationTapped", (alarm) =&gt; {
   console.log("Notification tapped:", alarm);
 });
 ```
@@ -303,7 +303,7 @@ removeAllListeners() => Promise<void>
 Remove all registered listeners.
 
 ```ts
-await capacitorAlarm.removeAllListeners();
+await capacitorExactAlarmPlugin.removeAllListeners();
 ```
 
 --------------------
@@ -393,7 +393,7 @@ Returned when selecting an alarm sound.
 | missedText     | string?    | Text shown for missed alarms. |
 | data           | any?       | Additional custom data returned on events. |
 
-<code>{ id?: number; timestamp?: number; <a href="#calendar">calendar</a>?: <a href="#calendar">calendar</a>; repeatInterval?: number; title: string; msg: string; soundName: string; icon?: string; dismissText?: string; missedText?: string; data?: any; }</code>
+<code>{ id?: number; timestamp?: number; <a href="#calendar">calendar</a>?: <a href="#calendar">calendar</a>; repeatInterval?: number; title: string; msg: string; soundName?: string; icon?: string; dismissText?: string; missedText?: string; data?: any; }</code>
 
 
 ### Enums
