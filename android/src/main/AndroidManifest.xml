@@ -1,2 +1,28 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="hu.bk.plugins.capacitorAlarm">
+
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+
+
+
+    <application android:attributionTags="alarm">
+        <receiver android:name="hu.bk.plugins.capacitorAlarm.AlarmReceiver" />
+        <receiver android:name="hu.bk.plugins.capacitorAlarm.AlarmDismissReceiver" />
+        <activity
+            android:name="hu.bk.plugins.capacitorAlarm.NotificationOpenActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <service
+            android:name="hu.bk.plugins.capacitorAlarm.AlarmService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+        </application>
 </manifest>
