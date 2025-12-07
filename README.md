@@ -1,11 +1,11 @@
-# capacitor-alarm
+# capacitor-exact-alarm
 
-Alarm clock scheduler
+Alarm clock scheduler plugin for Android Capacitor
 
 ## Install
 
 ```bash
-npm install capacitor-alarm
+npm install capacitor-exact-alarm
 npx cap sync
 ```
 

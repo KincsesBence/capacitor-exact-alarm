@@ -1,6 +1,6 @@
 {
   "name": "capacitor-exact-alarm",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Exact Alarm foreground service scheduler",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

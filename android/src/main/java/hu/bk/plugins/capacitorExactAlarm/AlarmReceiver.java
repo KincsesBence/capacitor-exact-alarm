@@ -25,21 +25,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         String missedText = intent.getStringExtra("missedText");
 
         capacitorExactAlarmPlugin plugin = capacitorExactAlarmPlugin.getInstance();
-        plugin.notifyAlarmTriggered(intent);
 
-        Log.d("AlarmReceiver", "Alarm fired: " + alarmId);
-
-        Intent eventIntent = new Intent("CAPACITOR_ALARM_EVENT");
-        eventIntent.putExtra("alarmId", alarmId);
-        eventIntent.putExtra("title", title);
-        eventIntent.putExtra("msg", msg);
-        eventIntent.putExtra("soundName", soundName);
-        eventIntent.putExtra("data", data);
-
-        // broadcast only inside this app (private)
-        eventIntent.setPackage(context.getPackageName());
-
-        context.sendBroadcast(eventIntent);
+        if(plugin != null){
+            plugin.notifyAlarmTriggered(intent);
+        }
 
         // Start the foreground service to handle alarm
         Intent serviceIntent = new Intent(context, AlarmService.class);

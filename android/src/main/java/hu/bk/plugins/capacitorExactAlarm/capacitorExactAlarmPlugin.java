@@ -63,20 +63,6 @@ public class capacitorExactAlarmPlugin extends Plugin {
         }
     }
 
-    /*@Override
-    protected void handleOnNewIntent(Intent intent) {
-        super.handleOnNewIntent(intent);
-
-        // Check if the intent came from our notification launch (which copies the extra)
-        if (intent.hasExtra("alarmId") && !intent.getBooleanExtra("handledByPlugin", false)) {
-            int alarmId = intent.getIntExtra("alarmId", -1);
-            Log.d(getLogTag(), "handleOnNewIntent alarmId: " + alarmId);
-            if (alarmId != -1) {
-                handleNotificationTap(intent);
-            }
-        }
-    }*/
-
     public void handleNotificationTap(Intent intent) {
         int alarmId = intent.getIntExtra("alarmId", -1);
         String title = intent.getStringExtra("title");
