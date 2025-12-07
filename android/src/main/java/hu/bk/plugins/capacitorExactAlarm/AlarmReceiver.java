@@ -24,6 +24,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         String dismissText = intent.getStringExtra("dismissText");
         String missedText = intent.getStringExtra("missedText");
 
+        capacitorExactAlarmPlugin plugin = capacitorExactAlarmPlugin.getInstance();
+        plugin.notifyAlarmTriggered(intent);
+
         Log.d("AlarmReceiver", "Alarm fired: " + alarmId);
 
         Intent eventIntent = new Intent("CAPACITOR_ALARM_EVENT");
@@ -79,7 +82,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
             Intent nextIntent = new Intent(context, AlarmReceiver.class);
-            nextIntent.setAction("ALARM_" + alarmId);  // ✅ same unique action
+            nextIntent.setAction("ALARM_" + alarmId);
             nextIntent.putExtra("alarmId", alarmId);
             nextIntent.putExtras(intent.getExtras());
 

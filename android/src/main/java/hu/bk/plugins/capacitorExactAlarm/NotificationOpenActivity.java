@@ -21,6 +21,10 @@ public class NotificationOpenActivity extends Activity {
 
         Intent intent = getIntent();
         int alarmId = intent.getIntExtra("alarmId", -1);
+        String title = intent.getStringExtra("title");
+        String msg = intent.getStringExtra("msg");
+        String soundName = intent.getStringExtra("soundName");
+        String data = intent.getStringExtra("data");
 
         Log.d(TAG, "Notification tapped. Received alarmId: " + alarmId);
 
@@ -30,6 +34,7 @@ public class NotificationOpenActivity extends Activity {
         if (plugin != null && alarmId != -1) {
             // Case 1: App is running (foreground or background). Plugin instance exists.
             // Call the public handler method on the main plugin
+            intent.putExtra("handledByPlugin", true);
             plugin.handleNotificationTap(intent);
             Log.d(TAG, "Event sent to plugin via static handler.");
         } else if (alarmId != -1) {
@@ -47,6 +52,11 @@ public class NotificationOpenActivity extends Activity {
 
                 // Copy the alarmId extra to the launch intent
                 launchIntent.putExtra("alarmId", alarmId);
+                launchIntent.putExtra("title", title);
+                launchIntent.putExtra("msg",msg);
+                launchIntent.putExtra("soundName",soundName);
+                launchIntent.putExtra("data",data);
+                launchIntent.putExtra("handledByPlugin", false);
 
                 context.startActivity(launchIntent);
                 Log.d(TAG, "Plugin instance was null. Relaunching main activity with intent.");

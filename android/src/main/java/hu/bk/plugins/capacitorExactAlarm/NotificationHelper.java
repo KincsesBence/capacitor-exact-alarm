@@ -38,7 +38,7 @@ public class NotificationHelper {
         }
     }
 
-    public static void showNotification(Context context, String title, String message, String icon) {
+    public static void showNotification(Context context, String title, String message, String icon ,String data,Integer alarmId ) {
         int iconId = context.getResources().getIdentifier(icon, "drawable", context.getPackageName());
 
         if (iconId == 0) {
@@ -48,7 +48,15 @@ public class NotificationHelper {
 
         createNotificationChannel(context);
 
-        Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+        // Create an explicit intent to your NotificationOpenActivity
+        Intent intent = new Intent(context, NotificationOpenActivity.class);
+
+        // Pass all the necessary extras
+        intent.putExtra("alarmId", alarmId);
+        intent.putExtra("title", title);
+        intent.putExtra("msg", message);
+        intent.putExtra("data", data);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context,
                 0,

@@ -3,6 +3,7 @@ package hu.bk.plugins.capacitorExactAlarm;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -41,8 +42,6 @@ public class AlarmService extends Service {
         }
     }
 
-
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && "STOP_ALARM".equals(intent.getAction())) {
@@ -80,13 +79,18 @@ public class AlarmService extends Service {
         player = new MediaPlayer();
         try {
             player.setDataSource(this, soundUri);
-            player.setAudioStreamType(AudioManager.STREAM_ALARM);
+            player.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_ALARM)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                            .build()
+            );
             player.prepare();
             player.start();
             player.setOnCompletionListener(mp -> {
                 Log.d("AlarmService", "Sound finished playing");
                 stopSelf();
-                NotificationHelper.showNotification(this,missedText + title ,msg,icon);
+                NotificationHelper.showNotification(this, missedText + title, msg, icon, data, alarmId);
             });
 
         } catch (Exception e) {

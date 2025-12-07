@@ -13,6 +13,7 @@
 
 
     <application android:attributionTags="alarm">
+
         <receiver android:name="hu.bk.plugins.capacitorExactAlarm.AlarmReceiver" />
         <receiver android:name="hu.bk.plugins.capacitorExactAlarm.AlarmDismissReceiver" />
         <activity

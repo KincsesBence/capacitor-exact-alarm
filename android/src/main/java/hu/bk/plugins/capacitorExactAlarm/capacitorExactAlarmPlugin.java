@@ -51,8 +51,9 @@ public class capacitorExactAlarmPlugin extends Plugin {
         setActivity();
         setUpAlarmBroadcast();
 
-        Intent launchIntent = bridge.getActivity().getIntent();
-        if (launchIntent != null && launchIntent.hasExtra("alarmId")) {
+        Intent launchIntent = getActivity().getIntent();
+        if (launchIntent != null && launchIntent.hasExtra("alarmId") &&
+                !launchIntent.getBooleanExtra("handledByPlugin", false)) {
             int alarmId = launchIntent.getIntExtra("alarmId", -1);
             if (alarmId != -1) {
                 // Process the notification tap immediately upon plugin load
@@ -62,18 +63,19 @@ public class capacitorExactAlarmPlugin extends Plugin {
         }
     }
 
-    @Override
+    /*@Override
     protected void handleOnNewIntent(Intent intent) {
         super.handleOnNewIntent(intent);
 
         // Check if the intent came from our notification launch (which copies the extra)
-        if (intent.hasExtra("alarmId")) {
+        if (intent.hasExtra("alarmId") && !intent.getBooleanExtra("handledByPlugin", false)) {
             int alarmId = intent.getIntExtra("alarmId", -1);
+            Log.d(getLogTag(), "handleOnNewIntent alarmId: " + alarmId);
             if (alarmId != -1) {
                 handleNotificationTap(intent);
             }
         }
-    }
+    }*/
 
     public void handleNotificationTap(Intent intent) {
         int alarmId = intent.getIntExtra("alarmId", -1);
@@ -98,13 +100,10 @@ public class capacitorExactAlarmPlugin extends Plugin {
             }
         }
 
+        Log.d("handleNotificationTap", "alarmId: "+alarmId);
         // Emit the event to the web view. The web side must listen for 'alarmNotificationTapped'.
         notifyListeners("alarmNotificationTapped", ret,true);
 
-        // Log the event emission
-        bridge.getActivity().runOnUiThread(() -> {
-            Log.d(getLogTag(), "Emitted 'alarmNotificationTapped' for alarmId: " + alarmId);
-        });
     }
 
     public static capacitorExactAlarmPlugin getInstance() {
@@ -258,8 +257,12 @@ public class capacitorExactAlarmPlugin extends Plugin {
         alarmStorage.addAlarm(alarmData);
 
         JSObject result = new JSObject();
-        result.put("alarmId", alarmId);
-        result.put("alarm", alarmData);
+            result.put("id", alarmId);
+            result.put("timestamp", timestamp);
+            result.put("title", title);
+            result.put("msg", msg);
+            result.put("soundName", soundName);
+            result.put("data", data);
         call.resolve(result);
 
         Log.d("setAlarm", "Alarm set!"+timestamp);
@@ -475,13 +478,29 @@ public class capacitorExactAlarmPlugin extends Plugin {
     }
 
     // Call this from your alarm receiver / service when alarm triggers
-    public void notifyAlarmTriggered(int id, String title, String msg, long timestamp) {
-        JSObject data = new JSObject();
-        data.put("id", id);
-        data.put("title", title);
-        data.put("msg", msg);
-        data.put("timestamp", timestamp);
+    public void notifyAlarmTriggered(Intent intent) {
+        int alarmId = intent.getIntExtra("alarmId", -1);
+        String title = intent.getStringExtra("title");
+        String msg = intent.getStringExtra("msg");
+        String soundName = intent.getStringExtra("soundName");
+        String data = intent.getStringExtra("data");
 
-        notifyListeners("alarmTriggered", data);  // ✅ FIRE EVENT
+        JSObject ret = new JSObject();
+        ret.put("alarmId", alarmId);
+        ret.put("title", title);
+        ret.put("msg", msg);
+        ret.put("soundName", soundName);
+
+        if (data == null || data.length() == 0) {
+            ret.put("data",new JSONObject());
+        } else {
+            try {
+                ret.put("data",new JSONObject(data));
+            }catch (Exception e){
+                Log.e("handleNotificationTap", "invalid JSON" );
+            }
+        }
+
+        notifyListeners("alarmTriggered", ret);
     }
 }
